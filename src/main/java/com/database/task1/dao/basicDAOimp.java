@@ -19,10 +19,10 @@ public class basicDAOimp implements basicDAO {
     public static final String username = "root";
     public static final String password = "991016";
 
-    private Driver driver = new com.mysql.jdbc.Driver();
-    Connection conn = DriverManager.getConnection(url,username,password);
+    Connection conn ;
 
     public void insert(int id, String a, String b) throws SQLException {
+
         String sql = "insert into test1 (id, name, addr) values (?,?,?)";
         PreparedStatement sm = conn.prepareStatement(sql);
         sm.setInt(1,id);
@@ -281,5 +281,11 @@ public class basicDAOimp implements basicDAO {
         return vehicle;
     }
     public basicDAOimp() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(url,username,password);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

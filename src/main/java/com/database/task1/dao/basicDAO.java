@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public interface basicDAO {
 
-    public void insert(int id, String a, String b) throws SQLException;
+    public void insert(int id, String a, String b) throws SQLException, ClassNotFoundException;
 
     public PersonInformation FindDriverByPersonNo(String personNo) throws SQLException;
 
