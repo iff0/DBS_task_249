@@ -1,5 +1,6 @@
 package com.database.task1.datastream;
 
+import com.database.task1.entity.Offense;
 import com.database.task1.item.Color;
 import com.database.task1.item.VehicleType;
 
@@ -11,9 +12,9 @@ public class VehicleInformation {
     VehicleType type;
     String personNo;
     Color color;
-    ArrayList<String> offenseNo;
+    ArrayList<Offense> offenseNo;
 
-    public VehicleInformation(int vehicleNo, String licensePlateNo, VehicleType type, String personNo, Color color, ArrayList<String> offenseNo) {
+    public VehicleInformation(int vehicleNo, String licensePlateNo, VehicleType type, String personNo, Color color, ArrayList<Offense> offenseNo) {
         this.vehicleNo = vehicleNo;
         this.licensePlateNo = licensePlateNo;
         this.type = type;
@@ -42,7 +43,7 @@ public class VehicleInformation {
         return color;
     }
 
-    public ArrayList<String> getOffenseNo() {
+    public ArrayList<Offense> getOffenseNo() {
         return offenseNo;
     }
 

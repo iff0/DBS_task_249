@@ -15,11 +15,20 @@ import static com.database.task1.item.RandomString.getRandomString;
 
 public class basicDAOimp implements basicDAO {
 
-    public static final String url = "jdbc:mysql://127.0.0.1:3306/task1?serverTimezone=GMT%2B8&useSSL=false";
+    public static final String url = "jdbc:mysql://127.0.0.1:3306/task1?serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8";
     public static final String username = "root";
     public static final String password = "991016";
 
     Connection conn ;
+
+    public basicDAOimp() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(url,username,password);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void insert(int id, String a, String b) throws SQLException {
 
@@ -43,13 +52,19 @@ public class basicDAOimp implements basicDAO {
         person.setDriverLicenseNo(rs.getString(2));
         person.setName(rs.getString(3));
 
-        String sql1 = "select offenseNo from offense where personNo=?";
+        String sql1 = "select * from offense where personNo=?";
         PreparedStatement ps = conn.prepareStatement(sql1);
         ps.setString(1,personNo);
         ResultSet res = ps.executeQuery();
-        ArrayList<String> offenses = new ArrayList<>();
+        ArrayList<Offense> offenses = new ArrayList<>();
         for (; res.next();) {
-            offenses.add(res.getString(1));
+            Offense offense = new Offense();
+            offense.setOffenseNo(res.getInt(1));
+            offense.setLicensePlateNo(res.getString(2));
+            offense.setLocation(res.getString(3));
+            offense.setTime(res.getString(4));
+            offense.setPersonNo(personNo);
+            offenses.add(offense);
         }
 
         ArrayList<Vehicle> vehicles = new ArrayList<>();
@@ -82,13 +97,19 @@ public class basicDAOimp implements basicDAO {
         person.setDriverLicenseNo(rs.getString(2));
         person.setName(rs.getString(3));
 
-        String sql1 = "select offenseNo from offense where personNo=?";
+        String sql1 = "select * from offense where personNo=?";
         PreparedStatement ps = conn.prepareStatement(sql1);
         ps.setString(1,person.getPersonNo());
         ResultSet res = ps.executeQuery();
-        ArrayList<String> offenses = new ArrayList<>();
-        for (; res.next(); ) {
-            offenses.add(res.getString(1));
+        ArrayList<Offense> offenses = new ArrayList<>();
+        for (; res.next();) {
+            Offense offense = new Offense();
+            offense.setOffenseNo(res.getInt(1));
+            offense.setLicensePlateNo(res.getString(2));
+            offense.setLocation(res.getString(3));
+            offense.setTime(res.getString(4));
+            offense.setPersonNo(person.getPersonNo());
+            offenses.add(offense);
         }
 
         ArrayList<Vehicle> vehicles = new ArrayList<>();
@@ -123,13 +144,19 @@ public class basicDAOimp implements basicDAO {
         vehicle.setPersonNo(rs.getString(4));
         vehicle.setColor(rs.getInt(5));
 
-        String sql1 = "select offenseNo from offense inner join vehicle on offense.personNo=vehicle.personNo where vehicleNo=?";
+        String sql1 = "select * from offense inner join vehicle on offense.licensePlateNo=vehicle.licensePlateNo where vehicleNo=?";
         PreparedStatement ps = conn.prepareStatement(sql1);
         ps.setInt(1,vehicleNo);
         ResultSet res = ps.executeQuery();
-        ArrayList<String> offenses = new ArrayList<>();
-        for (; res.next(); ) {
-            offenses.add(res.getString(1));
+        ArrayList<Offense> offenses = new ArrayList<>();
+        for (; res.next();) {
+            Offense offense = new Offense();
+            offense.setOffenseNo(res.getInt(1));
+            offense.setLicensePlateNo(res.getString(2));
+            offense.setLocation(res.getString(3));
+            offense.setTime(res.getString(4));
+            offense.setPersonNo(res.getString(5));
+            offenses.add(offense);
         }
 
         return new VehicleInformation(vehicleNo,vehicle.getLicensePlateNo(),vehicle.getType(),vehicle.getPersonNo(),vehicle.getColor(),offenses);
@@ -149,13 +176,19 @@ public class basicDAOimp implements basicDAO {
         vehicle.setPersonNo(rs.getString(4));
         vehicle.setColor(rs.getInt(5));
 
-        String sql1 = "select offenseNo from offense where licensePlateNo=?";
+        String sql1 = "select * from offense where licensePlateNo=?";
         PreparedStatement ps = conn.prepareStatement(sql1);
         ps.setString(1,licensePlateNo);
         ResultSet res = ps.executeQuery();
-        ArrayList<String> offenses = new ArrayList<>();
-        for (; res.next(); ) {
-            offenses.add(res.getString(1));
+        ArrayList<Offense> offenses = new ArrayList<>();
+        for (; res.next();) {
+            Offense offense = new Offense();
+            offense.setOffenseNo(res.getInt(1));
+            offense.setLicensePlateNo(res.getString(2));
+            offense.setLocation(res.getString(3));
+            offense.setTime(res.getString(4));
+            offense.setPersonNo(res.getString(5));
+            offenses.add(offense);
         }
 
         return new VehicleInformation(vehicle.getVehicleNo(),licensePlateNo,vehicle.getType(),vehicle.getPersonNo(),vehicle.getColor(),offenses);
@@ -216,17 +249,7 @@ public class basicDAOimp implements basicDAO {
             sm.setInt(5,color.getValue());
             boolean rs = sm.execute();
         } catch (Exception e) {
-            Random r = new Random();
-            int vehicleNo = r.nextInt(1000000);
-            String licensePlateNo = RandomString.getRandomString(8);
-            String sql = "insert into vehicle (vehicleNo,licensePlateNo,type,personNo,color) values (?,?,?,?,?)";
-            PreparedStatement sm = conn.prepareStatement(sql);
-            sm.setInt(1,vehicleNo);
-            sm.setString(2,licensePlateNo);
-            sm.setInt(3,type.getValue());
-            sm.setString(4,personNo);
-            sm.setInt(5,color.getValue());
-            boolean rs = sm.execute();
+            AddVehicle(personNo,color,type);
         }
     }
 
@@ -279,13 +302,5 @@ public class basicDAOimp implements basicDAO {
         vehicle.setPersonNo(rs.getString(4));
         vehicle.setColor(rs.getInt(5));
         return vehicle;
-    }
-    public basicDAOimp() throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url,username,password);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }

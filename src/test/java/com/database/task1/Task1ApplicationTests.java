@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 @SpringBootTest
 class Task1ApplicationTests {
 
-    @Test
+  /*  @Test
     void contextLoads() {
     }
 
@@ -40,7 +40,7 @@ class Task1ApplicationTests {
     }
 
     @Test
-    void testfindoffense() throws SQLException {
+    void estfindoffense() throws SQLException {
         basicDAOimp  daOimp = new basicDAOimp();
         System.out.println(daOimp.FindOffense());
     }
@@ -76,5 +76,5 @@ class Task1ApplicationTests {
     void testfindoffensebyno() throws SQLException {
         basicDAOimp  daOimp = new basicDAOimp();
         System.out.println(daOimp.FindOffenseByOffenseNo(366553));
-    }
+    }*/
 }
