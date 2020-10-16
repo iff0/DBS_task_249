@@ -17,7 +17,7 @@ public class basicDAOimp implements basicDAO {
 
     public static final String url = "jdbc:mysql://127.0.0.1:3306/task1?serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8";
     public static final String username = "root";
-    public static final String password = "991016";
+    public static final String password = "root";
 
     Connection conn ;
 
